@@ -2583,23 +2583,38 @@ async function carregarEliminatorias() {
 
     // Verifica se todas as 15 partidas do Balão
     // já possuem resultado registrado.
-    const {
-        data: resultadosBalao,
-        error: erroBalao
-    } = await supabaseClient
+const { data: partidasBalao, error: erroPartidas } =
+    await supabaseClient
+        .from("partidas")
+        .select("id")
+        .eq("modalidade", "Desafio do balão");
+
+if (erroPartidas) {
+    console.error(erroPartidas);
+    return;
+}
+
+const idsPartidasBalao =
+    partidasBalao.map(partida => partida.id);
+
+const { data: resultadosBalao, error: erroBalao } =
+    await supabaseClient
         .from("participantes")
-        .select("id, partida_id")
-        .not("partida_id", "is", null);
+        .select("partida_id, equipe_id, finalizado")
+        .in("partida_id", idsPartidasBalao);
 
-    if (erroBalao) {
-        console.error(erroBalao);
-        return;
-    }
+if (erroBalao) {
+    console.error(erroBalao);
+    return;
+}
 
-    // 5 equipes × 3 rodadas = 15 resultados
-    const balãoCompleto =
-        resultadosBalao &&
-        resultadosBalao.length >= 15;
+const finalizadosBalao =
+    (resultadosBalao || []).filter(
+        resultado => resultado.finalizado === true
+    );
+
+const balãoCompleto =
+    finalizadosBalao.length >= 15;
 
     // Carrega o chaveamento atual
     const {
