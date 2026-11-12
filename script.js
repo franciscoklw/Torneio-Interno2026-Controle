@@ -2581,104 +2581,151 @@ async function sortearChaveamento() {
 
 async function carregarEliminatorias() {
 
+    // Verifica se todas as 15 partidas do Balão
+    // já possuem resultado registrado.
     const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("chaveamento")
-            .select("*")
-            .order("id", {
-                ascending: false
-            })
-            .limit(1)
-            .maybeSingle();
+        data: resultadosBalao,
+        error: erroBalao
+    } = await supabaseClient
+        .from("participantes")
+        .select("id, partida_id")
+        .not("partida_id", "is", null);
 
-
-    if (error) {
-
-        console.error(error);
-
+    if (erroBalao) {
+        console.error(erroBalao);
         return;
     }
 
+    // 5 equipes × 3 rodadas = 15 resultados
+    const balãoCompleto =
+        resultadosBalao &&
+        resultadosBalao.length >= 15;
+
+    // Carrega o chaveamento atual
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("chaveamento")
+        .select("*")
+        .order("id", {
+            ascending: false
+        })
+        .limit(1)
+        .maybeSingle();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
 
     if (!data) {
         return;
     }
 
+    // Se as 15 partidas ainda não terminaram,
+    // não mostra nenhuma equipe nas semifinais.
+    if (!balãoCompleto) {
+
+        preencherSelect(
+            "semifinal1-vencedor",
+            [],
+            {},
+            "Aguardando término das 3 rodadas"
+        );
+
+        preencherSelect(
+            "semifinal2-vencedor",
+            [],
+            {},
+            "Aguardando término das 3 rodadas"
+        );
+
+        // Também mantém as fases seguintes vazias.
+        preencherSelect(
+            "final-vencedor",
+            [],
+            {},
+            "Aguardando as semifinais"
+        );
+
+        preencherSelect(
+            "terceiro-vencedor",
+            [],
+            {},
+            "Aguardando as semifinais"
+        );
+
+        return;
+    }
+
+    // -----------------------------------------------------
+    // BALÃO COMPLETO → CARREGA AS EQUIPES DAS SEMIFINAIS
+    // -----------------------------------------------------
 
     const ids = [
-
         data.semifinal1_equipe1,
         data.semifinal1_equipe2,
-
         data.semifinal2_equipe1,
         data.semifinal2_equipe2,
-
         data.semifinal1_vencedor,
         data.semifinal2_vencedor,
-
         data.semifinal1_perdedor,
         data.semifinal2_perdedor,
-
         data.final_vencedor,
         data.terceiro_vencedor
-
     ].filter(Boolean);
 
+    const {
+        data: equipes,
+        error: erroEquipes
+    } = await supabaseClient
+        .from("equipes")
+        .select("id, nome")
+        .in("id", ids);
 
-    const { data: equipes } =
-        await supabaseClient
-            .from("equipes")
-            .select("id, nome")
-            .in("id", ids);
-
+    if (erroEquipes) {
+        console.error(erroEquipes);
+        return;
+    }
 
     const nomes = {};
 
-
     equipes.forEach(equipe => {
-
         nomes[equipe.id] = equipe.nome;
     });
 
+    // -----------------------------------------------------
+    // SEMIFINAL 1
+    // -----------------------------------------------------
 
-// Semifinal 1.
-
-preencherSelect(
-    "semifinal1-vencedor",
-    data.semifinal1_vencedor
-        ? [
+    preencherSelect(
+        "semifinal1-vencedor",
+        [
             data.semifinal1_equipe1,
             data.semifinal1_equipe2
-        ]
-        : [],
-    nomes,
-    data.semifinal1_vencedor
-        ? "Selecione o vencedor"
-        : "Aguardando resultado da semifinal"
-);
+        ],
+        nomes,
+        "Selecione o vencedor"
+    );
 
+    // -----------------------------------------------------
+    // SEMIFINAL 2
+    // -----------------------------------------------------
 
-// Semifinal 2.
-
-preencherSelect(
-    "semifinal2-vencedor",
-    data.semifinal2_vencedor
-        ? [
+    preencherSelect(
+        "semifinal2-vencedor",
+        [
             data.semifinal2_equipe1,
             data.semifinal2_equipe2
-        ]
-        : [],
-    nomes,
-    data.semifinal2_vencedor
-        ? "Selecione o vencedor"
-        : "Aguardando resultado da semifinal"
-);
+        ],
+        nomes,
+        "Selecione o vencedor"
+    );
 
-
-    // Final.
+    // -----------------------------------------------------
+    // FINAL
+    // -----------------------------------------------------
 
     if (
         data.semifinal1_vencedor &&
@@ -2694,10 +2741,20 @@ preencherSelect(
             nomes,
             "Selecione o campeão"
         );
+
+    } else {
+
+        preencherSelect(
+            "final-vencedor",
+            [],
+            {},
+            "Aguardando as semifinais"
+        );
     }
 
-
-    // Terceiro lugar.
+    // -----------------------------------------------------
+    // 3º LUGAR
+    // -----------------------------------------------------
 
     if (
         data.semifinal1_perdedor &&
@@ -2712,6 +2769,15 @@ preencherSelect(
             ],
             nomes,
             "Selecione o vencedor"
+        );
+
+    } else {
+
+        preencherSelect(
+            "terceiro-vencedor",
+            [],
+            {},
+            "Aguardando as semifinais"
         );
     }
 }
