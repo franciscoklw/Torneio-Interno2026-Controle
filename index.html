@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Controle — Torneio Interno de Robótica 2026</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<header class="topo">
+
+    <div class="topo-conteudo">
+        <span class="marca">TECROBOT#9166</span>
+        <h1>Controle do Torneio</h1>
+        <p>Robótica 2026</p>
+    </div>
+    
+    <div class="logoTec"></div>
+    <nav>
+        <a href="#" data-secao="balao" class="ativa">Balão</a>
+        <a href="#" data-secao="linha">Seguidor de Linha</a>
+        <a href="#" data-secao="eliminatorias">Eliminatórias</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <!-- =====================================================
+         BALÃO
+    ====================================================== -->
+
+    <section id="balao">
+
+        <div class="secao-titulo">
+            <span>MODALIDADE</span>
+            <h2>Desafio do Balão</h2>
+            <p>Selecione a equipe e a rodada que deseja registrar.</p>
+        </div>
+
+        <div class="painel">
+
+            <!-- EQUIPE E RODADA -->
+
+            <div class="selecao-grid selecao-balao">
+
+                <div class="campo-principal">
+                    <label for="equipe">Equipe</label>
+
+                    <select id="equipe">
+                        <option value="">Selecione a equipe</option>
+                    </select>
+                </div>
+
+                <div class="campo-principal">
+                    <label for="rodada-balao">Rodada</label>
+
+                    <select id="rodada-balao" disabled>
+                        <option value="">Selecione a rodada</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <div id="nome-equipe" class="equipe-card">
+                Selecione uma equipe
+            </div>
+
+
+            <!-- PONTUAÇÃO -->
+
+            <div class="rodadas">
+
+                <article class="rodada-card">
+
+                    <div class="rodada-header">
+                        <h3 id="titulo-rodada-balao">
+                            Selecione uma rodada
+                        </h3>
+                    </div>
+
+
+                    <!-- AUTÔNOMO -->
+
+                    <div class="subtitulo">
+                        <h3>Autônomo</h3>
+                        <p>Informe a quantidade de balões estourados.</p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="autonomo-central-balao">
+                            Central — 60 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="autonomo-central-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="autonomo-outro-lado-balao">
+                            Outro lado — 120 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="autonomo-outro-lado-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="autonomo-atras-adversario-balao">
+                            Atrás do adversário — 300 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="autonomo-atras-adversario-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+
+                    <!-- TELEOPERADO -->
+
+                    <div class="subtitulo">
+                        <h3>Teleoperado</h3>
+                        <p>Informe a quantidade de balões estourados.</p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="teleoperado-central-balao">
+                            Central — 20 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="teleoperado-central-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="teleoperado-outro-lado-balao">
+                            Outro lado — 40 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="teleoperado-outro-lado-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="teleoperado-atras-adversario-balao">
+                            Atrás do adversário — 100 pontos por balão
+                        </label>
+
+                        <input
+                            type="number"
+                            id="teleoperado-atras-adversario-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+
+                    <!-- SOBREVIVENTE -->
+
+                    <div class="campo-checkbox">
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="sobrevivente-balao"
+                            >
+
+                            <span>
+                                Sobrevivente <strong>+20</strong>
+                            </span>
+                        </label>
+                    </div>
+
+
+                    <!-- PENALIDADES -->
+
+                    <div class="campo">
+                        <label for="penalidades-balao">
+                            Penalidades — 40 pontos cada
+                        </label>
+
+                        <input
+                            type="number"
+                            id="penalidades-balao"
+                            min="0"
+                            step="1"
+                            value="0"
+                        >
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <p id="status-balao" class="status-balao">
+                Selecione equipe e rodada.
+            </p>
+
+
+            <!-- TOTAL -->
+
+            <div class="total-geral">
+
+                <div>
+                    <span>Pontuação da rodada</span>
+                    <small>Resultado individual</small>
+                </div>
+
+                <strong id="total-geral">0</strong>
+
+            </div>
+
+
+            <!-- SALVAR -->
+
+            <button
+                id="salvar-balao"
+                class="botao-principal"
+                disabled
+            >
+                Salvar resultado
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEGUIDOR DE LINHA
+    ====================================================== -->
+
+    <section id="linha" style="display: none;">
+
+        <div class="secao-titulo">
+            <span>MODALIDADE</span>
+            <h2>Seguidor de Linha</h2>
+            <p>Registre as tentativas da partida e de cada etapa do percurso.</p>
+        </div>
+
+        <div class="painel">
+
+            <div class="selecao-grid">
+
+                <div class="campo-principal">
+                    <label for="equipe-linha">Equipe</label>
+
+                    <select id="equipe-linha">
+                        <option value="">Selecione a equipe</option>
+                    </select>
+                </div>
+
+                <div class="campo-principal">
+                    <label for="circuito-linha">Circuito</label>
+
+                    <select id="circuito-linha">
+                        <option value="">Selecione o circuito</option>
+                        <option value="1">Circuito 1</option>
+                        <option value="2">Circuito 2</option>
+                        <option value="3">Circuito 3</option>
+                    </select>
+                </div>
+
+                <div class="campo-principal">
+                    <label for="tentativa-partida-linha">
+                        Tentativa da partida
+                    </label>
+
+                    <select id="tentativa-partida-linha">
+                        <option value="">Selecione a tentativa</option>
+                        <option value="1">1ª tentativa</option>
+                        <option value="2">2ª tentativa</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <div id="nome-equipe-linha" class="equipe-card">
+                Selecione uma equipe
+            </div>
+
+
+            <!-- CRONÔMETRO -->
+
+            <div class="controle-partida">
+
+                <div class="cronometro-painel">
+
+                    <span>Tempo da partida</span>
+
+                    <strong id="cronometro-linha">
+                        00:00.00
+                    </strong>
+
+                    <small>Limite: 03:00.00</small>
+
+                </div>
+
+                <div class="botoes-partida">
+
+                    <button
+                        type="button"
+                        id="iniciar-partida-linha"
+                        class="botao-principal"
+                        disabled
+                    >
+                        Iniciar partida
+                    </button>
+
+                    <button
+                        type="button"
+                        id="finalizar-partida-linha"
+                        class="botao-finalizar"
+                        disabled
+                    >
+                        Finalizar partida
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ETAPAS -->
+
+            <div class="subtitulo">
+                <h3>Tentativas dos checkpoints</h3>
+
+                <p>
+                    Escolha a tentativa do checkpoint e registre
+                    a pontuação durante a partida.
+                </p>
+            </div>
+
+            <div id="etapas-linha" class="checkpoints">
+
+                <p class="mensagem-inicial">
+                    Selecione a equipe, o circuito e a tentativa da partida.
+                    Depois, clique em Iniciar partida.
+                </p>
+
+            </div>
+
+
+            <!-- FINALIZAÇÃO -->
+
+            <div class="subtitulo">
+                <h3>Resultado</h3>
+                <p>O tempo será registrado automaticamente pelo cronômetro.</p>
+            </div>
+
+            <input
+                type="hidden"
+                id="linha-tempo"
+                value="0"
+            >
+
+
+            <div class="pontuacao-final">
+
+                <div>
+                    <span>Pontuação total</span>
+                    <small>Somente tentativas aprovadas</small>
+                </div>
+
+                <strong id="linha-total">0</strong>
+
+            </div>
+
+
+            <button
+                id="salvar-linha"
+                class="botao-principal"
+                disabled
+            >
+                Salvar resultado
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ELIMINATÓRIAS
+    ====================================================== -->
+
+    <section id="eliminatorias" style="display: none;">
+
+        <div class="secao-titulo">
+            <span>FASE FINAL</span>
+            <h2>Eliminatórias</h2>
+            <p>Registre os vencedores de cada confronto.</p>
+        </div>
+
+        <div class="eliminatorias-grid">
+
+            <article class="eliminatoria-card">
+
+                <span class="fase">SEMIFINAL 1</span>
+                <h3>Semifinal 1</h3>
+
+                <select id="semifinal1-vencedor">
+                    <option value="">Selecione o vencedor</option>
+                </select>
+
+                <button id="salvar-semifinal1">
+                    Salvar vencedor
+                </button>
+
+            </article>
+
+
+            <article class="eliminatoria-card">
+
+                <span class="fase">SEMIFINAL 2</span>
+                <h3>Semifinal 2</h3>
+
+                <select id="semifinal2-vencedor">
+                    <option value="">Selecione o vencedor</option>
+                </select>
+
+                <button id="salvar-semifinal2">
+                    Salvar vencedor
+                </button>
+
+            </article>
+
+
+            <article class="eliminatoria-card destaque-final">
+
+                <span class="fase">FINAL</span>
+                <h3>Campeão</h3>
+
+                <select id="final-vencedor">
+                    <option value="">Selecione o campeão</option>
+                </select>
+
+                <button id="salvar-final">
+                    Salvar campeão
+                </button>
+
+            </article>
+
+
+            <article class="eliminatoria-card">
+
+                <span class="fase">3º LUGAR</span>
+                <h3>Disputa de 3º lugar</h3>
+
+                <select id="terceiro-vencedor">
+                    <option value="">Selecione o vencedor</option>
+                </select>
+
+                <button id="salvar-terceiro">
+                    Salvar 3º colocado
+                </button>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
