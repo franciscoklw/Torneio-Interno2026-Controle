@@ -2644,30 +2644,38 @@ async function carregarEliminatorias() {
     });
 
 
-    // Semifinal 1.
+// Semifinal 1.
 
-    preencherSelect(
-        "semifinal1-vencedor",
-        [
+preencherSelect(
+    "semifinal1-vencedor",
+    data.semifinal1_vencedor
+        ? [
             data.semifinal1_equipe1,
             data.semifinal1_equipe2
-        ],
-        nomes,
-        "Selecione o vencedor"
-    );
+        ]
+        : [],
+    nomes,
+    data.semifinal1_vencedor
+        ? "Selecione o vencedor"
+        : "Aguardando resultado da semifinal"
+);
 
 
-    // Semifinal 2.
+// Semifinal 2.
 
-    preencherSelect(
-        "semifinal2-vencedor",
-        [
+preencherSelect(
+    "semifinal2-vencedor",
+    data.semifinal2_vencedor
+        ? [
             data.semifinal2_equipe1,
             data.semifinal2_equipe2
-        ],
-        nomes,
-        "Selecione o vencedor"
-    );
+        ]
+        : [],
+    nomes,
+    data.semifinal2_vencedor
+        ? "Selecione o vencedor"
+        : "Aguardando resultado da semifinal"
+);
 
 
     // Final.
