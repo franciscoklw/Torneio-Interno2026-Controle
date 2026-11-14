@@ -1664,18 +1664,16 @@ botaoSalvarLinha.addEventListener("click", async () => {
                 });
     }
 
+if (resultado.error) {
+    console.error("ERRO COMPLETO AO SALVAR:", resultado.error);
 
-    if (resultado.error) {
+    alert(
+        "Erro ao salvar:\n\n" +
+        resultado.error.message
+    );
 
-        console.error(resultado.error);
-
-        alert(
-            "Erro ao salvar o resultado. " +
-            "Verifique a coluna detalhes_linha no Supabase."
-        );
-
-        return;
-    }
+    return;
+}
 
 
     alert(
