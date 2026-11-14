@@ -1961,10 +1961,13 @@ function carregarOpcoesRodadaBalao() {
     }
 
 
-const partidasEquipe =
-    partidasBalaoCache.filter(
-        partida => Number(partida.equipe_id) === equipeId
-    );
+    const partidasEquipe =
+        partidasBalaoCache.filter(
+            partida => Number(partida.equipe_id) === equipeId
+        );
+
+
+    partidasEquipe.forEach((partida, indice) => {
 
         const option =
             document.createElement("option");
@@ -1991,6 +1994,11 @@ const partidasEquipe =
         return;
     }
 
+
+    statusBalao.textContent =
+        "Selecione a rodada que deseja registrar.";
+
+}
 
     statusBalao.textContent =
         "Selecione a rodada que deseja registrar.";
