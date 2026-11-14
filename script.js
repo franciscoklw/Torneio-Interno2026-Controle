@@ -1971,24 +1971,18 @@ function carregarOpcoesRodadaBalao() {
     }
 
 
-    const indiceEquipe =
-        equipesBalaoCache.findIndex(
-            equipe => Number(equipe.id) === equipeId
-        );
+const indiceEquipe =
+    equipesBalaoCache.findIndex(
+        equipe => Number(equipe.id) === equipeId
+    );
 
+if (indiceEquipe < 0) return;
 
-    if (indiceEquipe < 0) return;
+const inicio =
+    indiceEquipe * 3;
 
-
-    // Cada equipe possui três partidas de Balão.
-    // Mantém a organização existente dos registros do Supabase.
-
-    const inicio =
-        indiceEquipe * 3;
-
-    const partidasEquipe =
-        partidasBalaoCache.slice(inicio, inicio + 3);
-
+const partidasEquipe =
+    partidasBalaoCache.slice(inicio, inicio + 3);
 
     partidasEquipe.forEach((partida, indice) => {
 
