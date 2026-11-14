@@ -1866,10 +1866,9 @@ async function carregarPartidasBalao() {
     const { data, error } =
         await supabaseClient
             .from("partidas")
-            .select("id")
+            .select("id, equipe_id")
             .eq("modalidade", "Desafio do balão")
             .order("id");
-
 
     if (error) {
 
@@ -1882,15 +1881,6 @@ async function carregarPartidasBalao() {
 
 
     partidasBalaoCache = data || [];
-
-
-    if (partidasBalaoCache.length !== 3) {
-
-        console.warn(
-            `Esperadas 3 partidas do Balão. Encontradas: ${partidasBalaoCache.length}.`
-        );
-
-    }
 
 }
 
@@ -1971,20 +1961,10 @@ function carregarOpcoesRodadaBalao() {
     }
 
 
-const indiceEquipe =
-    equipesBalaoCache.findIndex(
-        equipe => Number(equipe.id) === equipeId
-    );
-
-if (indiceEquipe < 0) return;
-
-const inicio =
-    indiceEquipe * 3;
-
 const partidasEquipe =
-    partidasBalaoCache.slice(inicio, inicio + 3);
-
-    partidasEquipe.forEach((partida, indice) => {
+    partidasBalaoCache.filter(
+        partida => Number(partida.equipe_id) === equipeId
+    );
 
         const option =
             document.createElement("option");
