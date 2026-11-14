@@ -1994,12 +1994,6 @@ function carregarOpcoesRodadaBalao() {
         return;
     }
 
-
-    statusBalao.textContent =
-        "Selecione a rodada que deseja registrar.";
-
-}
-
     statusBalao.textContent =
         "Selecione a rodada que deseja registrar.";
 
